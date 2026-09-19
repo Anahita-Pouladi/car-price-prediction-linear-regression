@@ -1,6 +1,6 @@
-# Used Car Price Prediction with Linear Regression
+# Car Price Prediction with Linear Regression
 
-An end-to-end regression project for predicting used-car selling prices with an interpretable Linear Regression baseline.
+An end-to-end regression project for predicting car selling prices with an interpretable Linear Regression baseline.
 
 The project focuses on more than the final score. It shows how categorical variables, feature engineering, data leakage prevention, residual diagnostics, and cross-validation fit together in a clean machine learning workflow.
 
@@ -12,7 +12,7 @@ This repository also includes focused notes that connect the modeling decisions 
 
 - [Categorical Features in Regression](docs/categorical_features_in_regression.md)
 - [Statistics for Car Price Regression](docs/statistics_for_car_price_regression.md)
-- [Jupyter Notebook](notebooks/used_car_price_linear_regression.ipynb)
+- [Jupyter Notebook](notebooks/car-price-prediction-linear-regression.ipynb)
 
 ---
 
@@ -29,6 +29,19 @@ This project adds several challenges that are especially useful for a portfolio:
 - feature engineering for vehicle age,
 - duplicate records,
 - and leakage-safe preprocessing inside a pipeline.
+
+---
+
+## Quick Results
+
+| Metric | Result |
+|---|---:|
+| Test R² | 0.753 |
+| Test RMSE | 2.524 |
+| 5-Fold CV R² | 0.852 |
+| 5-Fold CV RMSE | 1.870 |
+
+The Linear Regression baseline performs consistently across cross-validation folds, while the held-out test split is somewhat weaker. With a dataset of this size, reporting both views gives a more useful picture than relying on a single split alone.
 
 ---
 
@@ -378,7 +391,7 @@ The complete notebook is also available on Kaggle:
 ## Project Structure
 
 ```text
-used-car-price-linear-regression/
+car-price-prediction-linear-regression/
 │
 ├── README.md
 ├── .gitignore
@@ -388,7 +401,7 @@ used-car-price-linear-regression/
 │   └── car_data.csv
 │
 ├── notebooks/
-│   └── used_car_price_linear_regression.ipynb
+│   └── car-price-prediction-linear-regression.ipynb
 │
 ├── docs/
 │   ├── categorical_features_in_regression.md
