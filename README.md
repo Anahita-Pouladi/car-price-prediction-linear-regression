@@ -369,7 +369,9 @@ The next experiments I would prioritize are:
 
 ## 17. Kaggle Notebook
 
-The Kaggle notebook link will be added after the executable version is published.
+The complete notebook is also available on Kaggle:
+
+[View the Kaggle Notebook](https://www.kaggle.com/code/anahitapouladi/car-price-prediction-linear-regression)
 
 ---
 
