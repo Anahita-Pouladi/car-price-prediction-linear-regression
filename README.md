@@ -4,6 +4,11 @@ An end-to-end regression project for predicting car selling prices with an inter
 
 The project focuses on more than the final score. It shows how categorical variables, feature engineering, data leakage prevention, residual diagnostics, and cross-validation fit together in a clean machine learning workflow.
 
+## Project Links
+
+- **GitHub Repository:** [car-price-prediction-linear-regression](https://github.com/Anahita-Pouladi/car-price-prediction-linear-regression)
+- **Kaggle Notebook:** [Car Price Prediction | Linear Regression](https://www.kaggle.com/code/anahitapouladi/car-price-prediction-linear-regression)
+
 ---
 
 ## Learning Resources
@@ -41,7 +46,7 @@ This project adds several challenges that are especially useful for a portfolio:
 | 5-Fold CV R² | 0.852 |
 | 5-Fold CV RMSE | 1.870 |
 
-The Linear Regression baseline performs consistently across cross-validation folds, while the held-out test split is somewhat weaker. With a dataset of this size, reporting both views gives a more useful picture than relying on a single split alone.
+Across the five cross-validation folds, R² ranges from 0.753 to 0.908. With these exact split settings, the held-out test set happens to match Fold 1, which is the lowest-scoring fold in this run. That is why the test score sits below the CV average. With a dataset of this size, reporting both views gives a more useful picture than relying on a single split alone.
 
 ---
 
@@ -72,6 +77,17 @@ The initial data-quality review found:
 - 2 transmission categories.
 
 The two duplicate rows are removed before the train/test split.
+
+The maximum `Kms_Driven` value is 500,000 km, far above the 75th percentile of roughly 48,900 km. It may be a genuine high-mileage car or a data-entry error, so it is kept in the baseline but flagged for review.
+
+### Dataset Source and License
+
+- **Dataset:** [Vehicle dataset from CarDekho on Kaggle](https://www.kaggle.com/datasets/nehalbirla/vehicle-dataset-from-cardekho)
+- **License:** Database: Open Database, Contents: Database Contents
+- **Original Kaggle filename:** `car data.csv`
+- **Repository copy used:** `data/car_data.csv`
+
+The notebook loader accepts `car_data.csv`, `cardata.csv`, and `car data.csv`, so the same notebook can run locally or with the original Kaggle filename.
 
 ### Feature Dictionary
 
@@ -182,13 +198,11 @@ The correlation matrix focuses on the numerical variables and places `Selling_Pr
 
 The statistical ideas used in the project are tied directly to modeling decisions:
 
-- mean and median,
-- variance and standard deviation,
+- mean, median, and standard deviation,
 - Pearson correlation,
-- covariance,
-- outlier diagnostics,
+- IQR-based outlier diagnostics,
 - residual analysis,
-- normality assessment,
+- normality assessment with a Q-Q plot,
 - and sampling variability across train/validation splits.
 
 The IQR rule is used as a diagnostic rather than an automatic deletion rule. An unusual value may still be valid, so clipping or removing it without investigation can distort the data.
@@ -275,7 +289,9 @@ The held-out result shows that the linear baseline captures a meaningful part of
 | MAE | ~1.231 | ~0.169 |
 | RMSE | ~1.870 | ~0.478 |
 
-The cross-validation average is stronger than the single held-out split. On a dataset this small, that difference is worth reporting rather than presenting one split as the definitive estimate of model performance.
+R² by fold: 0.753, 0.868, 0.843, 0.888, 0.908.
+
+The cross-validation average is higher than the single held-out result. With these exact split settings (`random_state=42`, 20% test size, 5 shuffled folds), the held-out cars happen to match Fold 1, which is also the lowest-scoring fold in this run. The test score is therefore one of the five fold scores rather than an independent check. On a dataset this small, that spread is worth reporting instead of presenting one split as the definitive estimate of model performance.
 
 ### Actual vs. Predicted Selling Price
 
@@ -295,6 +311,8 @@ For one-hot encoded variables, coefficients are interpreted relative to their re
 
 Raw coefficient magnitudes should not be treated as a feature-importance ranking because the numerical features use different units and scales.
 
+Some coefficients also rest on very little data. Only 2 of the 299 cars use CNG, and almost every car has `Owner = 0`, so the positive `Owner` coefficient should not be read as "more previous owners raise the price".
+
 ---
 
 ## 13. Residual Diagnostics
@@ -307,7 +325,13 @@ The project checks:
 - whether residual variance changes across the prediction range,
 - and whether the residual distribution departs strongly from normality.
 
-The diagnostics support Linear Regression as a useful baseline, but they also suggest that nonlinear relationships and interactions may still be present.
+The diagnostics support Linear Regression as a useful baseline, but they also show its limits on the 60 test cars:
+
+- the residuals curve slightly, and the spread grows for higher predicted prices,
+- the model predicts a negative selling price for a few cars (down to about -5),
+- and one car has a residual of about +11, far from the rest.
+
+Together, these suggest that nonlinear relationships and interactions may still be present.
 
 ### Residuals vs. Predicted Values
 
@@ -317,7 +341,7 @@ Ideally, residuals should be scattered around zero without a strong pattern. Thi
 
 ### Q-Q Plot of Residuals
 
-The Q-Q plot compares the residual distribution with a theoretical normal distribution. Departures from the reference line, especially in the tails, provide a useful warning that the residuals are not perfectly normal.
+The Q-Q plot compares the residual distribution with a theoretical normal distribution. Departures from the reference line in both tails, driven by one large positive residual and a few large negative ones, are a useful warning that the residuals are not perfectly normal.
 
 ![Q-Q Plot of Residuals](images/qq_plot_residuals.png)
 
@@ -349,6 +373,7 @@ The next experiments I would prioritize are:
 - Polynomial Regression
 - Random Forest Regression
 - Gradient Boosting Regression
+- a log transform of the target
 - repeated cross-validation
 - influence diagnostics
 - high-cardinality handling for `Car_Name`
@@ -377,14 +402,6 @@ The next experiments I would prioritize are:
 - Git
 - GitHub
 - Kaggle
-
----
-
-## 17. Kaggle Notebook
-
-The complete notebook is also available on Kaggle:
-
-[View the Kaggle Notebook](https://www.kaggle.com/code/anahitapouladi/car-price-prediction-linear-regression)
 
 ---
 
